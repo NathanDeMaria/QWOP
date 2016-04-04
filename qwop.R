@@ -4,7 +4,6 @@ library(uuid)
 start_qwop <- function() {
   startServer()
   
-  # Need http://chromedriver.storage.googleapis.com/index.html?path=2.21/ in your path
   driver <- remoteDriver(browserName = "chrome")
   driver$open()
   driver$navigate('http://www.foddy.net/Athletics.html?webgl=true')

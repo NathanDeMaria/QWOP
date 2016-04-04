@@ -12,19 +12,25 @@ alive_factor <- .5
 
 driver <- start_qwop()
 
-generation_files <- list.files('memory/', full.names = T)
-m <- regexpr('[0-9]+', generation_files)
-generation_numbers <- as.numeric(regmatches(generation_files, m))
-recent_generation <- which.max(generation_numbers)
+generation_files <- list.files('memory/', full.names = T, pattern = '.rds')
 
-current_generation <- readRDS(generation_files[recent_generation])
+if(length(generation_files) > 0) {
+  m <- regexpr('[0-9]+', generation_files)
+  generation_numbers <- as.numeric(regmatches(generation_files, m))
+  recent_generation <- which.max(generation_numbers)
+  start_generation <- generation_numbers[recent_generation] + 1
+  current_generation <- readRDS(generation_files[recent_generation])
+} else {
+  start_generation <- 2
+  # Start from scratch
+  current_generation <- lapply(seq_len(initial_generation_size), function(i) {
+    matrix(sample(0:1, size = 100, replace = T), ncol = 4, byrow = T)
+  })
+}
 
-# Start from scratch
-# current_generation <- lapply(seq_len(initial_generation_size), function(i) {
-#   matrix(sample(0:1, size = 100, replace = T), ncol = 4, byrow = T)
-# })
 
-for(i in seq(generation_numbers[recent_generation] + 1, length.out = 100)) {
+
+for(i in seq(start_generation, length.out = 100)) {
   cat(sprintf('Generation %d\n', i))
   
   # Just in case :)

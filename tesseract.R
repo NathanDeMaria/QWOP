@@ -1,5 +1,3 @@
-# Download Tesseract install from https://github.com/UB-Mannheim/tesseract/wiki
-# Add to path
 library(png)
 library(jpeg)
 
