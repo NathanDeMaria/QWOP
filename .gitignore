@@ -1,0 +1,16 @@
+# R
+.RData
+.Rhistory
+.Rproj.user/
+
+# OCR
+outputs/*
+!outputs/README.md
+screenshots/*
+!screenshots/README.md
+
+# Logs
+memory/*
+!memory/README.md
+
+
