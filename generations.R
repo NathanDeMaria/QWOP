@@ -14,12 +14,6 @@ evaluate_generation <- function(generation) {
   distances
 }
 
-# percentile <- function(x) {
-#   probability <- rep(0, length(x))
-#   probability[!is.na(x)] <- rank(x[!is.na(x)], na.last = F) / length(x[!is.na(x)])
-#   probability
-# }
-
 scale_range <- function(x) {
   min_x <- min(x, na.rm = T)
   max_x <- max(x, na.rm = T)
@@ -34,13 +28,25 @@ to_probability <- function(x, expected_keep) {
 
 make_babies <- function(parents, mutate_probability, longer_probability) {
   lapply(parents, function(parent) {
+    options <- seq(-1, 1)
     flip <- sample(0:1, replace = T, size = length(parent), prob = c(1 - mutate_probability, mutate_probability))
-    mutated <- apply(xor(parent, flip), 2, as.numeric)
+    
+    # super inefficient, oh well
+    mutated <- sapply(seq_along(parent), function(i) {
+      if(flip[i]) {
+        sample(options[options != parent[i]], size = 1)
+      } else {
+        parent[i]
+      }
+    })
+    mutated <- matrix(mutated, byrow = F, ncol = 4)
+    
     if(longer_probability > runif(1)) {
-      # adds a half second, to the front because time goes the other direction :/
-      mutated <- rbind(mutated, matrix(sample(0:1, replace = T, size = 20), ncol = 4))
+      # adds a half second from a random other parent
+      other_parent <- sample(parents, size = 1)[[1]]
+      mutated <- rbind(mutated, tail(other_parent, n = 5))
     }
-    mutated
+    simplify_genome(mutated)
   })
 }
 
@@ -55,4 +61,27 @@ next_generation <- function(current_generation) {
   babies <- make_babies(current_generation[is_parent], mutate_probability, longer_probability)
   
   c(babies, current_generation[does_survive])
+}
+
+simplify_genome <- function(genome) {
+  apply(genome, 2, function(x) {
+    # I'm so sorry, it's just easier
+    on <- F
+    for(i in seq_along(x)) {
+      if(x[i] == 1) {
+        if(on) {
+          x[i] <- 0
+        } else {
+          on <- T
+        }
+      } else if (x[i] == -1) {
+        if(on) {
+          on <- F
+        } else {
+          x[i] <- 0
+        }
+      }
+    }
+    x
+  })
 }
