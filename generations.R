@@ -29,6 +29,12 @@ to_probability <- function(x, expected_keep) {
 make_babies <- function(parents, mutate_probability, longer_probability) {
   lapply(parents, function(parent) {
     options <- seq(-1, 1)
+    
+    flip <- sapply(seq_len(nrow(parent)), function(i) {
+      # total probability is still ~mutate_probability, but end ones are less likely
+      adjusted_probability <- (i / nrow(parent) + 0.5) * mutate_probability
+      sample(0:1, replace = T, size = 4, prob = c(1 - adjusted_probability, adjusted_probability))
+    })
     flip <- sample(0:1, replace = T, size = length(parent), prob = c(1 - mutate_probability, mutate_probability))
     
     # super inefficient, oh well
