@@ -36,13 +36,13 @@ start_qwop <- function() {
     
     function hitButtons(keySequence, time) {
       var keyGroup = keySequence.pop();
-      for(var i = 0; i < keyGroup.length; i++) {
-        keyEvent(keyGroup[i], false);
+      for(var i = 0; i < keyGroup.downs.length; i++) {
+        keyEvent(keyGroup.downs[i], false);
+      }
+      for(var i = 0; i < keyGroup.ups.length; i++) {
+        keyEvent(keyGroup.ups[i], true);
       }
       setTimeout(function() {
-        for(var i = 0; i < keyGroup.length; i++) {
-          keyEvent(keyGroup[i], true);
-        }
         if(keySequence.length > 0) {
           hitButtons(keySequence, time)
         }
@@ -52,6 +52,10 @@ start_qwop <- function() {
     function enterSequence(keySequence, time=100) {
       keyEvent(82, true);
       keyEvent(82, false);
+      keyEvent(81, false);
+      keyEvent(87, false);
+      keyEvent(79, false);
+      keyEvent(80, false);
       hitButtons(keySequence, time);
     }
     window.enterSequence = enterSequence;
@@ -64,11 +68,11 @@ kill <- function(driver) {
   driver$closeServer()
 }
 
-translate_vector <- function(qwop) {
+translate_vector <- function(qwop, down) {
   # Take a vector of length 4 and turn it into to the keyCodes for QWOP
   keys <- c(81, 87, 79, 90)
   unlist(sapply(seq_along(qwop), function(i) {
-    if(qwop[i]) {
+    if(qwop[i] == ifelse(down, 1, -1)) {
       keys[i]
     }
   }))
@@ -78,8 +82,11 @@ run_sequence <- function(driver, sequence) {
   # Flip the sequence
   sequence <- sequence[rev(seq_len(dim(sequence)[1])), , drop=F]
   second_arrays <- apply(sequence, 1, function(r) {
-    qwop <- translate_vector(r)
-    paste('[', paste(qwop, collapse = ', '), ']')
+    downs <- translate_vector(r, T)
+    ups <- translate_vector(r, F)
+    down_list <- paste('[', paste(downs, collapse = ', '), ']')
+    up_list <- paste('[', paste(ups, collapse = ', '), ']')
+    sprintf('{downs:%s, ups:%s}', down_list, up_list)
   })
   script <- sprintf('enterSequence([%s], 100);', paste(second_arrays, collapse = ', '))
   driver$executeScript(script)

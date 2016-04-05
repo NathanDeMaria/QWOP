@@ -5,14 +5,14 @@ source('generations.R')
 initial_generation_size <- 50
 survive_probability <- 2 / 3
 parent_probability <- 1 / 3
-mutate_probability <- .1
+mutate_probability <- .02
 longer_probability <- .5
 alive_factor <- .5
 
 
 driver <- start_qwop()
 
-generation_files <- list.files('memory/', full.names = T, pattern = '.rds')
+generation_files <- list.files('memory/', full.names = T, pattern = '*.rds')
 
 if(length(generation_files) > 0) {
   m <- regexpr('[0-9]+', generation_files)
@@ -24,7 +24,7 @@ if(length(generation_files) > 0) {
   start_generation <- 2
   # Start from scratch
   current_generation <- lapply(seq_len(initial_generation_size), function(i) {
-    matrix(sample(0:1, size = 100, replace = T), ncol = 4, byrow = T)
+    matrix(sample(seq(-1, 1), size = 100, replace = T, prob = c(.2, .6, .2)), ncol = 4, byrow = T)
   })
 }
 
