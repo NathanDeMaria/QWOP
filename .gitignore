@@ -3,6 +3,10 @@
 .Rhistory
 .Rproj.user/
 
+# Python/PyCharm
+*.pyc
+.idea/
+
 # OCR
 outputs/*
 !outputs/README.md
@@ -12,5 +16,7 @@ screenshots/*
 # Logs
 memory/*
 !memory/README.md
+master/logs/*.txt
+master/genealogy/*.pkl
 
-
+.Rproj.user
