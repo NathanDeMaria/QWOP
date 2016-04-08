@@ -13,3 +13,10 @@ Using a genetic algorithm to evolve a good qwopper.
 
 ## Running
 Just run `main.R` and don't resize the window and it'll do magic.  Ideally...
+
+## Config
+Add a `config.xml` inside `config/`. Use the format from `sample_config.xml`. 
+- `master_url` should be set to the url for your `master/app.py`
+
+## Master
+To run the master (takes care of generations math), run `python master/app.py`

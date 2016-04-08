@@ -3,6 +3,8 @@
 .Rhistory
 .Rproj.user/
 
+config/config.xml
+
 # Python/PyCharm
 *.pyc
 .idea/
@@ -19,4 +21,3 @@ memory/*
 master/logs/*.txt
 master/genealogy/*.pkl
 
-.Rproj.user
