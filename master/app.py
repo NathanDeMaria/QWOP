@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 from datetime import datetime
 from flask import Flask, jsonify, request
 
@@ -20,7 +21,13 @@ def new_task():
 def finish_task():
     j = request.json
     logging.info("Finished task {task_id}".format(task_id=j['task_id']))
-    generation_manager.finish_task(j['task_id'], float(j['score']))
+
+    if j['score'] == 'NA':
+        score = np.nan
+    else:
+        score = float(j['score'])
+
+    generation_manager.finish_task(j['task_id'], score)
     return "YAY"
 
 
