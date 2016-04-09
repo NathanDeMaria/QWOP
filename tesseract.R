@@ -17,35 +17,27 @@ get_ocr <- function(png_file) {
   readLines(sprintf('%s.txt', output_file))
 }
 
-
-dead <- function(ocr_outputs) {
-  sapply(ocr_outputs, function(ocr_output) {
-    cleaned <- gsub(' ', '', ocr_output)
-    any(grepl('PARTICIPANT', cleaned))
-  })
+dead <- function(ocr_output) {
+  cleaned <- gsub(' ', '', ocr_output)
+  any(grepl('PARTICIPANT', cleaned))
 }
 
-distance <- function(ocr_outputs) {
+distance <- function(ocr_output) {
   # Struggles with *.2 metres
-  metres <- sapply(ocr_outputs, function(x) {x[3]})
+  metres <- ocr_output[3]
   metres <- gsub(' 2 metres', '.2 metres', metres)
   nums <- gsub(' metres', '', metres)
   suppressWarnings(as.numeric(nums))
 }
 
-
-
-
-
-# distance <- function(ocr_outputs) {
-#   l <- sapply(ocr_outputs, function(x) {x[1]})
-#   
-#   # Sometimes it recognizes this at the beginning for some reason
-#   l <- gsub('E W 4', '', l)
-#   
-#   metres <- gsub('[^[\\-0-9\\.a-z]]*', '', l)
-#   m <- regexpr('[\\-0-9\\.]*metres', metres)
-#   just_metres <- regmatches(metres, m)
-#   num <- gsub('metres', '', just_metres)
-#   as.numeric(num)
-# }
+get_score <- function(png_file, alive_factor=1.2) {
+  outputs <- get_ocr(png_file)
+  qwop_died <- dead(outputs)
+  d <- distance(outputs)
+  
+  if(qwop_died) {
+    d
+  } else {
+    d * alive_factor
+  }
+}
