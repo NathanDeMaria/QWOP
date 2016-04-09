@@ -7,7 +7,7 @@ start_qwop <- function() {
   driver <- remoteDriver(browserName = "chrome")
   driver$open()
   driver$navigate('http://www.foddy.net/Athletics.html?webgl=true')
-  driver$setWindowSize(400, 520)
+  driver$setWindowSize(675, 510)
   
   # Give page load some time
   Sys.sleep(10)

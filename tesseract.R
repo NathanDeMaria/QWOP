@@ -1,16 +1,23 @@
 library(png)
 library(jpeg)
 
-png_to_jpg <- function(png_file) {
-  jpg_file <- gsub('\\.png', '.jpg', png_file)
+get_distance_image <- function(png_file) {
+  jpg_file <- gsub('\\.png', '_distance.jpg', png_file)
   img <- readPNG(png_file)
-  writeJPEG(img, target = jpg_file)
+  smaller <- img[187:217, 208:422, 1]
+  writeJPEG(smaller, target = jpg_file)
   jpg_file
 }
 
-get_ocr <- function(png_file) {
-  jpg_file <- png_to_jpg(png_file)
-  
+get_upper_distance_image <- function(png_file) {
+  jpg_file <- gsub('\\.png', '_upper.jpg', png_file)
+  img <- readPNG(png_file)
+  smaller <- img[22:53, 145:492, 1]
+  writeJPEG(smaller, target = jpg_file)
+  jpg_file
+}
+
+get_ocr <- function(jpg_file) {
   output_file <- gsub('\\.jpg', '', gsub('screenshots', 'outputs', jpg_file))
   command <- sprintf('tesseract %s %s', jpg_file, output_file)
   shell(command)
@@ -23,21 +30,24 @@ dead <- function(ocr_output) {
 }
 
 distance <- function(ocr_output) {
-  # Struggles with *.2 metres
-  metres <- ocr_output[3]
-  metres <- gsub(' 2 metres', '.2 metres', metres)
+  if(length(ocr_output) == 0) {
+    return(NA)
+  }
+  metres <- ocr_output[grepl('-?[0-9]+\\.?[0-9]* metres', ocr_output)]
   nums <- gsub(' metres', '', metres)
   suppressWarnings(as.numeric(nums))
 }
 
 get_score <- function(png_file, alive_factor=1.2) {
-  outputs <- get_ocr(png_file)
-  qwop_died <- dead(outputs)
+  distance_jpg <- get_distance_image(png_file)
+  outputs <- get_ocr(distance_jpg)
   d <- distance(outputs)
   
-  if(qwop_died) {
-    d
+  if(is.na(d)) {
+    upper_distance_jpg <- get_upper_distance_image(png_file)
+    outputs <- get_ocr(upper_distance_jpg)
+    distance(outputs) * alive_factor
   } else {
-    d * alive_factor
+    d
   }
 }
