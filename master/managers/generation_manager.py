@@ -12,14 +12,14 @@ class GenerationManager(object):
         task = self._current_generation.get_task()
         if task is None:
             logging.info("Generation finished, waiting on new generation")
-            return "Just finished a generation, working on new one"
+            return dict(message="Just finished a generation, working on new one")
         if task.status is Status.AVAILABLE:
             task.status = Status.ASSIGNED
             logging.info("Task {genome_id} assigned".format(genome_id=task.id))
             return task.to_dict()
         elif task.status is Status.ASSIGNED:
             logging.info("Generation waiting on a task")
-            return "Just wait plz"
+            return dict(message="Just wait plz")
         else:
             raise ValueError("Unknown task status")
 
