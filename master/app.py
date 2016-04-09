@@ -20,13 +20,11 @@ def new_task():
 @app.route('/finish_task', methods=['POST'])
 def finish_task():
     j = request.json
-    logging.info("Finished task {task_id}".format(task_id=j['task_id']))
-
     if j['score'] == 'NA':
         score = np.nan
     else:
         score = float(j['score'])
-
+    logging.info("Finished task {task_id}. Score: {score}".format(task_id=j['task_id'], score=score))
     generation_manager.finish_task(j['task_id'], score)
     return "YAY"
 
