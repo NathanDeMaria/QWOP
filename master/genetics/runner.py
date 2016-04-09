@@ -19,6 +19,7 @@ def next_generation(generation):
     scores = np.array([g.score for g in generation.genomes])
     logging.info("Generation {generation_id} average score: {score}".format(generation_id=generation.id,
                                                                             score=np.nanmean(scores)))
+    logging.info("Generation size: {size}".format(size=len(scores)))
     save_generation(generation)
 
     does_survive = to_probability(scores, 2.0 / 3.0) > np.random.uniform(size=len(scores))
@@ -96,7 +97,7 @@ def to_probability(scores, expected_sum):
     min_score = np.nanmin(scores)
     max_score = np.nanmax(scores)
     if max_score == min_score:
-        return np.ones_like(scores)
+        return np.ones_like(scores) * expected_sum / len(scores)
     scaled = (scores - min_score) / (max_score - min_score)
     scaled[np.isnan(scaled)] = 0
-    return scores * expected_sum / scores.sum() * len(scores)
+    return scaled * expected_sum / scaled.sum() * len(scaled)
