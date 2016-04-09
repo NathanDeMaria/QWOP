@@ -21,7 +21,10 @@ get_ocr <- function(jpg_file) {
   output_file <- gsub('\\.jpg', '', gsub('screenshots', 'outputs', jpg_file))
   command <- sprintf('tesseract %s %s', jpg_file, output_file)
   shell(command)
-  readLines(sprintf('%s.txt', output_file))
+  txt_file <- sprintf('%s.txt', output_file)
+  lines <- readLines(txt_file)
+  file.remove(txt_file, jpg_file)
+  lines
 }
 
 dead <- function(ocr_output) {
@@ -43,11 +46,14 @@ get_score <- function(png_file, alive_factor=1.2) {
   outputs <- get_ocr(distance_jpg)
   d <- distance(outputs)
   
-  if(is.na(d)) {
+  d <- if(is.na(d)) {
     upper_distance_jpg <- get_upper_distance_image(png_file)
     outputs <- get_ocr(upper_distance_jpg)
     distance(outputs) * alive_factor
   } else {
     d
   }
+  
+  file.remove(png_file)
+  d
 }
