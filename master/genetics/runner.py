@@ -23,7 +23,7 @@ def next_generation(generation):
     save_generation(generation)
 
     does_survive = to_probability(scores, 2.0 / 3.0) > np.random.uniform(size=len(scores))
-    has_baby = to_probability(scores, 2.0 / 3.0) > np.random.uniform(size=len(scores))
+    has_baby = to_probability(scores, 1.0 / 3.0) > np.random.uniform(size=len(scores))
 
     parents = [parent for parent, is_parent in zip(generation.genomes, has_baby) if is_parent]
     babies = [make_baby(parent.code) for parent in parents]
