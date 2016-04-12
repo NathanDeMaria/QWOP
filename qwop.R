@@ -70,7 +70,7 @@ kill <- function(driver) {
 
 translate_vector <- function(qwop, down) {
   # Take a vector of length 4 and turn it into to the keyCodes for QWOP
-  keys <- c(81, 87, 79, 90)
+  keys <- c(81, 87, 79, 80)
   unlist(sapply(seq_along(qwop), function(i) {
     if(qwop[i] == ifelse(down, 1, -1)) {
       keys[i]
