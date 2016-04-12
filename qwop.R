@@ -49,7 +49,7 @@ start_qwop <- function() {
       }, time)
     }
     
-    function enterSequence(keySequence, time=100) {
+    function enterSequence(keySequence, time) {
       keyEvent(82, true);
       keyEvent(82, false);
       keyEvent(81, false);
