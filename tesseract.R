@@ -54,7 +54,12 @@ get_score <- function(png_file, alive_factor=1.2) {
   d <- if(length(d) == 0 || is.na(d)) {
     upper_distance_jpg <- get_upper_distance_image(png_file)
     outputs <- get_ocr(upper_distance_jpg)
-    distance(outputs) * alive_factor
+    new_d <- distance(outputs) * alive_factor
+    if(length(new_d) == 0) {
+      NA
+    } else {
+      new_d
+    }
   } else {
     d
   }
