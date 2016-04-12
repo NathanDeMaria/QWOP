@@ -1,7 +1,6 @@
 # R
 .RData
 .Rhistory
-.Rproj.user/
 
 config/config.xml
 
@@ -21,3 +20,4 @@ memory/*
 master/logs/*.txt
 master/genealogy/*.pkl
 
+.Rproj.user
