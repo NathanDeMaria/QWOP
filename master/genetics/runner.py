@@ -22,8 +22,8 @@ def next_generation(generation):
     logging.info("Generation size: {size}".format(size=len(scores)))
     save_generation(generation)
 
-    does_survive = to_probability(scores, 2.0 / 3.0) > np.random.uniform(size=len(scores))
-    has_baby = to_probability(scores, 1.0 / 3.0) > np.random.uniform(size=len(scores))
+    does_survive = to_probability(scores, len(scores) * 2.0 / 3.0) > np.random.uniform(size=len(scores))
+    has_baby = to_probability(scores, len(scores) * 1.0 / 3.0) > np.random.uniform(size=len(scores))
 
     parents = [parent for parent, is_parent in zip(generation.genomes, has_baby) if is_parent]
     babies = [make_baby(parent.code) for parent in parents]
@@ -87,17 +87,26 @@ def save_generation(generation):
         pickle.dump(generation, f)
 
 
-def to_probability(scores, expected_sum):
+def to_probability(scores, expected_sum, temperature=1):
     """
     Adjust the scores to a probability
     :param scores: np.array of scores
     :param expected_sum: sum of probabilities
+    :param temperature: degree to which better scores mean better probabilities
     :return: np.array of probabilities
     """
-    min_score = np.nanmin(scores)
-    max_score = np.nanmax(scores)
-    if max_score == min_score:
-        return np.ones_like(scores) * expected_sum / len(scores)
-    scaled = (scores - min_score) / (max_score - min_score)
-    scaled[np.isnan(scaled)] = 0
-    return scaled * expected_sum / scaled.sum() * len(scaled)
+    good_scores = scores[~np.isnan(scores)]
+    e = np.exp(good_scores / float(temperature))
+    scaled = e / e.sum()
+    max_multiplier = 1.0 / scaled.max()
+
+    if expected_sum < max_multiplier:
+        adjusted_scores = scaled * expected_sum
+    else:
+        tilted_up = scaled * max_multiplier
+        adjustment = (expected_sum - tilted_up.sum()) / float(tilted_up.size - tilted_up.sum())
+        adjusted_scores = tilted_up * (1.0 - adjustment) + adjustment
+
+    final_scores = np.zeros_like(scores)
+    final_scores[~np.isnan(scores)] = adjusted_scores
+    return final_scores
