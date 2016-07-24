@@ -9,7 +9,7 @@
 #' @export
 get_task <- function(master_root) {
   task_url <- sprintf('%s/new_task', master_root)
-  response <- content(GET(task_url))
+  response <- httr::content(httr::GET(task_url))
   if(!is.null(response[['message']])) {
     return(response)
   }
@@ -34,8 +34,8 @@ finish_task <- function(master_root, task_id, score) {
     sprintf('{"task_id": "%s", "score": %f}', task_id, score)
   }
 
-  response <- POST(finish_url,
-                   add_headers('Content-Type'='application/json'),
-                   body = json_body)
+  response <- httr::POST(finish_url,
+                         httr::add_headers('Content-Type'='application/json'),
+                         body = json_body)
   response$status_code == 200
 }
