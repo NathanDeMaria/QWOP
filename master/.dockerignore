@@ -1,0 +1,4 @@
+Dockerfile
+logs/*.txt
+memory/*.rds
+genealogy/*.pkl
