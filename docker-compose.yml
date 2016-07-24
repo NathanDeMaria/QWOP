@@ -1,7 +1,7 @@
 version: '2'
 services:
   r:
-    build: ./runner/.
+    image: nathandemaria/qwop_slaver
     ports:
     - "8787:8787"
     depends_on:
