@@ -34,5 +34,4 @@ def finish_task():
 if __name__ == '__main__':
     logging.basicConfig(filename='logs/{time}.txt'.format(
         time=datetime.now().strftime('%Y%m%d_%H%M%S')), level=logging.INFO)
-    app.run('0.0.0.0')
-
+    app.run('0.0.0.0', port=5000)
