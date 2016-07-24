@@ -1,0 +1,17 @@
+Package: qwop
+Type: Package
+Title: QWOP Simulator Slave
+Version: 0.1.0
+Author: Nathan DeMaria
+Maintainer: Nathan DeMaria <nathandmaria@gmail.com>
+Description: Runs QWOP sequences through Selenium, receiving instructions from a "QWOP master" and sending back the results of the run
+License: GPL, I guess
+LazyData: TRUE
+Imports:
+    httr,
+    jpeg,
+    logging,
+    png,
+    RSelenium,
+    uuid
+RoxygenNote: 5.0.1

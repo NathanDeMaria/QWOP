@@ -1,0 +1,12 @@
+version: '2'
+services:
+  r:
+    build: ./runner/.
+    ports:
+    - "8787:8787"
+    depends_on:
+    - selenium
+  selenium:
+    image: selenium/standalone-firefox-debug
+    ports:
+    - "4444:4444"
