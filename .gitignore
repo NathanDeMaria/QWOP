@@ -15,9 +15,10 @@ runner/screenshots/*
 !runner/screenshots/README.md
 
 # Logs
-memory/*
-!memory/README.md
+master/memory/*
+!master/memory/README.md
 master/logs/*.txt
 master/genealogy/*.pkl
 
 .Rproj.user
+
