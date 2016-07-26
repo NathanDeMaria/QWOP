@@ -9,15 +9,16 @@ config/config.xml
 .idea/
 
 # OCR
-outputs/*
-!outputs/README.md
-screenshots/*
-!screenshots/README.md
+runner/outputs/*
+!runner/outputs/README.md
+runner/screenshots/*
+!runner/screenshots/README.md
 
 # Logs
-memory/*
-!memory/README.md
+master/memory/*
+!master/memory/README.md
 master/logs/*.txt
 master/genealogy/*.pkl
 
 .Rproj.user
+
