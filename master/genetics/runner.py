@@ -4,7 +4,7 @@ import logging
 import numpy as np
 
 from .startup import initial_generation, simplify_genome, random_code
-from genetics.genome import Status, Genome
+from genetics.genome import Genome
 from genetics.generation import Generation
 
 
@@ -29,9 +29,6 @@ def next_generation(generation):
     babies = [make_baby(parent.code) for parent in parents]
 
     survivors = [parent for parent, survives in zip(generation.genomes, does_survive) if survives]
-    for s in survivors:
-        s.status = Status.AVAILABLE
-
     return Generation(babies + survivors, generation.id + 1)
 
 
