@@ -1,0 +1,98 @@
+
+  "requiresAttributes": [],
+  "taskDefinitionArn": "<taskDefinitionArn>",
+  "status": "ACTIVE",
+  "revision": 5,
+  "taskRoleArn": null,
+  "containerDefinitions": [
+    {
+      "volumesFrom": [],
+      "memory": 1000,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 8787,
+          "containerPort": 8787,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": null,
+      "mountPoints": [],
+      "name": "r",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [
+        {
+          "name": "QWOP_MASTER_ROOT",
+          "value": "<QWOP_MASTER_ROOT>"
+        }
+      ],
+      "links": [
+        "selenium"
+      ],
+      "workingDirectory": null,
+      "readonlyRootFilesystem": null,
+      "image": "nathandemaria/qwop_slaver",
+      "command": null,
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 512,
+      "privileged": null,
+      "expanded": true
+    },
+    {
+      "volumesFrom": [],
+      "memory": 1000,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 4444,
+          "containerPort": 4444,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": null,
+      "mountPoints": [
+        {
+          "containerPath": "/dev/shm/",
+          "sourceVolume": "SHM",
+          "readOnly": null
+        }
+      ],
+      "name": "selenium",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [],
+      "links": null,
+      "workingDirectory": null,
+      "readonlyRootFilesystem": null,
+      "image": "selenium/standalone-firefox-debug",
+      "command": null,
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 512,
+      "privileged": null
+    }
+  ],
+  "volumes": [
+    {
+      "host": {
+        "sourcePath": "/dev/shm/"
+      },
+      "name": "SHM"
+    }
+  ],
+  "family": "qwop_slave"
+}
