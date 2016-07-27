@@ -75,6 +75,7 @@ def current_generation():
 
     generation_files = [f for f in os.listdir(GENEALOGY) if f.endswith('.pkl')]
     if len(generation_files) == 0:
+        logging.info("No generations. Creating an initial generation")
         return initial_generation()
 
     generation_files = sorted(generation_files,

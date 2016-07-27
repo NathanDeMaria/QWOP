@@ -55,7 +55,7 @@ def _create_tasks(genome, n=1):
     :param n: number of tasks
     :return: yields tasks
     """
-    if genome.has_score:
+    if not genome.has_score:
         return [Task(genome) for _ in range(n)]
     return []
 
