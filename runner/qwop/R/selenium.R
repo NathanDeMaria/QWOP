@@ -52,6 +52,8 @@ run_sequence <- function(driver, sequence, screenshot_dir='screenshots') {
   if(!dir.exists(screenshot_dir)) {
     stop(sprintf("Screenshot directory %s not found :(", screenshot_dir))
   }
+  start <- matrix(c(0, 1, 1, 0, rep(0, 4 * 50), 0, -1, -1, 0), ncol = 4, byrow = T)
+  sequence <- rbind(start, sequence)
   sequence <- sequence[rev(seq_len(dim(sequence)[1])), , drop=F]
   second_arrays <- apply(sequence, 1, function(r) {
     downs <- .translate_vector(r, T)
