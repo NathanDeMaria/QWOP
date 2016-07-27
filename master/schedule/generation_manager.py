@@ -34,6 +34,8 @@ class GenerationManager(object):
         finished = self._task_set.is_finished()
         if finished:
             self._finish_generation()
+            return True
+        return False
 
     def _finish_generation(self):
         for t in self._task_set.tasks:

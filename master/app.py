@@ -1,6 +1,5 @@
 import logging
 import numpy as np
-from datetime import datetime
 from flask import Flask, jsonify, request
 
 from schedule.generation_manager import GenerationManager

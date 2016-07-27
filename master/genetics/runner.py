@@ -29,6 +29,11 @@ def next_generation(generation):
     babies = [make_baby(parent.code) for parent in parents]
 
     survivors = [parent for parent, survives in zip(generation.genomes, does_survive) if survives]
+    logging.info("Generation results: {survivors} survivors\t{parents} parents\t{babies}babies".format(
+        survivors=len(survivors),
+        parents=len(parents),
+        babies=len(babies)
+    ))
     return Generation(babies + survivors, generation.id + 1)
 
 
