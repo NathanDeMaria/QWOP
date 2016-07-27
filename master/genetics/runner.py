@@ -49,9 +49,14 @@ def make_baby(parent_code, mutate_probability=.02):
                 options = [x for x in [-1, 0, 1] if x != baby_code[row, col]]
                 baby_code[row, col] = options[np.random.randint(2)]
 
-    if np.random.uniform() > 0.5:
+    # Shrink 1/3 of the time, grow 1/3 of the time, stay the same 1/3
+    # Generations should figure out which one is better ;)
+    length_option = np.random.uniform()
+    if length_option < 1 / 3.0:
         additional_sequence = random_code(5)
         baby_code = np.concatenate([baby_code, additional_sequence])
+    elif length_option < 2 / 3.0:
+        baby_code = baby_code[:-5]
 
     simplified_code = simplify_genome(baby_code)
     return Genome(simplified_code)
