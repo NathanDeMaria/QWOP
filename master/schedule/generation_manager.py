@@ -48,14 +48,16 @@ class GenerationManager(object):
         self._task_set = _create_task_set(self._current_generation)
 
 
-def _create_tasks(genome, n=3):
+def _create_tasks(genome, n=1):
     """
     Create a set of tasks for a genome
     :param genome: Genome
     :param n: number of tasks
     :return: yields tasks
     """
-    return [Task(genome) for _ in range(n)]
+    if genome.has_score:
+        return [Task(genome) for _ in range(n)]
+    return []
 
 
 def _create_task_set(generation):

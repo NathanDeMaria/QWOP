@@ -24,6 +24,10 @@ class Genome(object):
     def code(self):
         return self._code
 
+    @property
+    def has_score(self):
+        return len(self._scores) > 0
+
     def add_score(self, score):
         """
         Record a new score
