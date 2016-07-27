@@ -1,18 +1,18 @@
-function keyEvent(k, up) {
+function keyEvent(k, down) {
   var event = document.createEvent("Events");
-  event.initEvent(up ? "keyup" : "keydown", true, true);
+  event.initEvent(down ? "keydown" : "keyup", true, true);
   event.keyCode = k;
   event.which = k;
-  document.dispatchEvent(event);  
+  document.dispatchEvent(event);
 }
 
 function hitButtons(keySequence, time) {
   var keyGroup = keySequence.pop();
   for(var i = 0; i < keyGroup.downs.length; i++) {
-    keyEvent(keyGroup.downs[i], false);
+    keyEvent(keyGroup.downs[i], true);
   }
   for(var j = 0; j < keyGroup.ups.length; j++) {
-    keyEvent(keyGroup.ups[j], true);
+    keyEvent(keyGroup.ups[j], false);
   }
   setTimeout(function() {
     if(keySequence.length > 0) {
