@@ -3,7 +3,7 @@ import pickle
 import logging
 import numpy as np
 
-from .startup import initial_generation, simplify_genome, random_code
+from .startup import initial_generation, simplify_genome, random_code, INIT_SIZE
 from genetics.genome import Genome
 from genetics.generation import Generation
 
@@ -22,13 +22,18 @@ def next_generation(generation):
     logging.info("Generation size: {size}".format(size=len(scores)))
     save_generation(generation)
 
-    does_survive = to_probability(scores, len(scores) * 2.0 / 3.0) > np.random.uniform(size=len(scores))
-    has_baby = to_probability(scores, len(scores) * 1.0 / 3.0) > np.random.uniform(size=len(scores))
+    does_survive = to_probability(scores, INIT_SIZE * 2.0 / 3.0) > np.random.uniform(size=len(scores))
+    has_baby = to_probability(scores, INIT_SIZE * 1.0 / 3.0) > np.random.uniform(size=len(scores))
 
     parents = [parent for parent, is_parent in zip(generation.genomes, has_baby) if is_parent]
     babies = [make_baby(parent.code) for parent in parents]
 
-    survivors = [parent for parent, survives in zip(generation.genomes, does_survive) if survives]
+    if does_survive.sum() > 0:
+        survivors = [parent for parent, survives in zip(generation.genomes, does_survive) if survives]
+    else:
+        logging.warning("Everybody died! :( Keeping same generation")
+        survivors = generation.genomes
+
     logging.info("Generation results: {survivors} survivors\t{parents} parents\t{babies} babies".format(
         survivors=len(survivors),
         parents=len(parents),
