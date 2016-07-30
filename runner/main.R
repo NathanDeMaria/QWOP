@@ -1,3 +1,5 @@
+Sys.sleep(30)
+
 setwd('/root/runner/')
 library(qwop)
 library(logging)
