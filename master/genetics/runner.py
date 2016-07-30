@@ -50,14 +50,17 @@ def make_baby(parent_code, mutate_probability=.02):
     :return: baby genome
     """
     baby_code = parent_code.copy()
+    flip_count = 0
     for row in range(baby_code.shape[0]):
         # scaling probabilities so mutations happen more often at the end
-        row_probability = (row / baby_code.shape[0] + 0.5) * mutate_probability
-        flips = np.random.uniform(size=baby_code.shape[1]) > row_probability
+        row_probability = (float(row) / baby_code.shape[0] + 0.5) * mutate_probability
+        flips = np.random.uniform(size=baby_code.shape[1]) < row_probability
+        flip_count += flips.sum()
         for col in range(baby_code.shape[1]):
             if flips[col]:
                 options = [x for x in [-1, 0, 1] if x != baby_code[row, col]]
                 baby_code[row, col] = options[np.random.randint(2)]
+    logging.info("Attempting to flip {flip} of {total} elements".format(flip=flip_count, total=baby_code.size))
 
     # Shrink 1/3 of the time, grow 1/3 of the time, stay the same 1/3
     # Generations should figure out which one is better ;)
@@ -65,10 +68,14 @@ def make_baby(parent_code, mutate_probability=.02):
     if length_option < 1 / 3.0:
         additional_sequence = random_code(5)
         baby_code = np.concatenate([baby_code, additional_sequence])
+        logging.info("Bigger baby")
     elif length_option < 2 / 3.0:
         baby_code = baby_code[:-5]
+        logging.info("Shorter baby")
 
     simplified_code = simplify_genome(baby_code)
+    logging.info("Baby is a {:.03f} match with parent".format(
+        (baby_code[:len(parent_code)] == parent_code[:len(baby_code)]).mean()))
     return Genome(simplified_code)
 
 
@@ -77,7 +84,6 @@ def current_generation():
     Load the most recent generation from a pickle, or create the first one
     :return: current generation
     """
-
     generation_files = [f for f in os.listdir(GENEALOGY) if f.endswith('.pkl')]
     if len(generation_files) == 0:
         logging.info("No generations. Creating an initial generation")
