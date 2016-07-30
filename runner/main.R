@@ -1,9 +1,4 @@
 setwd('/root/runner/')
-
-library(devtools)
-package_loc <- 'qwop/'
-install_deps(package_loc)
-install.packages(package_loc, repos = NULL, type = 'source')
 library(qwop)
 library(logging)
 
