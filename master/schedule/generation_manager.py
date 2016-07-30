@@ -34,6 +34,8 @@ class GenerationManager(object):
         finished = self._task_set.is_finished()
         if finished:
             self._finish_generation()
+            return True
+        return False
 
     def _finish_generation(self):
         for t in self._task_set.tasks:
@@ -46,14 +48,16 @@ class GenerationManager(object):
         self._task_set = _create_task_set(self._current_generation)
 
 
-def _create_tasks(genome, n=3):
+def _create_tasks(genome, n=1):
     """
     Create a set of tasks for a genome
     :param genome: Genome
     :param n: number of tasks
     :return: yields tasks
     """
-    return [Task(genome) for _ in range(n)]
+    if not genome.has_score:
+        return [Task(genome) for _ in range(n)]
+    return []
 
 
 def _create_task_set(generation):

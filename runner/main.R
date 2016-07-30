@@ -21,17 +21,21 @@ i <- 1
 while(T) {
   logging::loginfo("Iteration %s", i)
   task <- get_task(master_root)
-  logging::loginfo("Received task %s", task$id)
-  png_file <- run_sequence(driver, sequence = task$sequence)
-  score <- get_score(png_file)
-  logging::loginfo("Task %s scored %s", task$id, score)
-  success <- finish_task(master_root, task$id, score)
-  if(!success) {
-    logging::logerror("Failed to submit task %s", task$id)
-    stop("Error submitting task")
+  if(!is.null(task$message)) {
+    logging::logwarn("No available tasks, waiting...")
   } else {
-    logging::loginfo("Submitted task %s to master", task$id)
-    Sys.sleep(5)
+    logging::loginfo("Received task %s", task$id)
+    png_file <- run_sequence(driver, sequence = task$sequence)
+    score <- get_score(png_file)
+    logging::loginfo("Task %s scored %s", task$id, score)
+    success <- finish_task(master_root, task$id, score)
+    if(!success) {
+      logging::logerror("Failed to submit task %s", task$id)
+      stop("Error submitting task")
+    } else {
+      logging::loginfo("Submitted task %s to master", task$id)
+    }
+    i <- i + 1
   }
-  i <- i + 1
+  Sys.sleep(5)
 }

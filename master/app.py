@@ -1,11 +1,11 @@
 import logging
 import numpy as np
-from datetime import datetime
 from flask import Flask, jsonify, request
 
 from schedule.generation_manager import GenerationManager
 
 
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
 app = Flask(__name__)
 generation_manager = GenerationManager()
 
@@ -32,5 +32,4 @@ def finish_task():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
     app.run('0.0.0.0', port=5000)

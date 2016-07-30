@@ -4,7 +4,10 @@ from .genome import Genome
 from .generation import Generation
 
 
-def initial_generation(n=50):
+INIT_SIZE = 50
+
+
+def initial_generation(n=INIT_SIZE):
     """
     Create a starting generation
     :param n: number of Genomes in the generation

@@ -13,8 +13,8 @@ class Task(object):
         self._id = uuid1()
         self._assigned_time = None
 
-        # If it takes 10 seconds more than the expected time to run, expire the assignment
-        self._expiration_seconds = 0.1 * self._code.shape[0] + 10
+        # If it takes 15 seconds more than the expected time to run, expire the assignment
+        self._expiration_seconds = 0.1 * self._code.shape[0] + 15
 
     @property
     def status(self):

@@ -1,13 +1,12 @@
-
+{
   "requiresAttributes": [],
   "taskDefinitionArn": "<taskDefinitionArn>",
   "status": "ACTIVE",
-  "revision": 5,
   "taskRoleArn": null,
   "containerDefinitions": [
     {
       "volumesFrom": [],
-      "memory": 1000,
+      "memory": 300,
       "extraHosts": null,
       "dnsServers": null,
       "disableNetworking": null,
@@ -37,18 +36,17 @@
       ],
       "workingDirectory": null,
       "readonlyRootFilesystem": null,
-      "image": "nathandemaria/qwop_slaver",
+      "image": "nathandemaria/qwop_slaver:20160726-2300",
       "command": null,
       "user": null,
       "dockerLabels": null,
       "logConfiguration": null,
       "cpu": 512,
-      "privileged": null,
-      "expanded": true
+      "privileged": null
     },
     {
       "volumesFrom": [],
-      "memory": 1000,
+      "memory": 500,
       "extraHosts": null,
       "dnsServers": null,
       "disableNetworking": null,

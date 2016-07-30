@@ -3,7 +3,7 @@ import pickle
 import logging
 import numpy as np
 
-from .startup import initial_generation, simplify_genome, random_code
+from .startup import initial_generation, simplify_genome, random_code, INIT_SIZE
 from genetics.genome import Genome
 from genetics.generation import Generation
 
@@ -22,13 +22,23 @@ def next_generation(generation):
     logging.info("Generation size: {size}".format(size=len(scores)))
     save_generation(generation)
 
-    does_survive = to_probability(scores, len(scores) * 2.0 / 3.0) > np.random.uniform(size=len(scores))
-    has_baby = to_probability(scores, len(scores) * 1.0 / 3.0) > np.random.uniform(size=len(scores))
+    does_survive = to_probability(scores, INIT_SIZE * 2.0 / 3.0) > np.random.uniform(size=len(scores))
+    has_baby = to_probability(scores, INIT_SIZE * 1.0 / 3.0) > np.random.uniform(size=len(scores))
 
     parents = [parent for parent, is_parent in zip(generation.genomes, has_baby) if is_parent]
     babies = [make_baby(parent.code) for parent in parents]
 
-    survivors = [parent for parent, survives in zip(generation.genomes, does_survive) if survives]
+    if does_survive.sum() > 0:
+        survivors = [parent for parent, survives in zip(generation.genomes, does_survive) if survives]
+    else:
+        logging.warning("Everybody died! :( Keeping same generation")
+        survivors = generation.genomes
+
+    logging.info("Generation results: {survivors} survivors\t{parents} parents\t{babies} babies".format(
+        survivors=len(survivors),
+        parents=len(parents),
+        babies=len(babies)
+    ))
     return Generation(babies + survivors, generation.id + 1)
 
 
@@ -49,9 +59,14 @@ def make_baby(parent_code, mutate_probability=.02):
                 options = [x for x in [-1, 0, 1] if x != baby_code[row, col]]
                 baby_code[row, col] = options[np.random.randint(2)]
 
-    if np.random.uniform() > 0.5:
+    # Shrink 1/3 of the time, grow 1/3 of the time, stay the same 1/3
+    # Generations should figure out which one is better ;)
+    length_option = np.random.uniform()
+    if length_option < 1 / 3.0:
         additional_sequence = random_code(5)
         baby_code = np.concatenate([baby_code, additional_sequence])
+    elif length_option < 2 / 3.0:
+        baby_code = baby_code[:-5]
 
     simplified_code = simplify_genome(baby_code)
     return Genome(simplified_code)
@@ -65,6 +80,7 @@ def current_generation():
 
     generation_files = [f for f in os.listdir(GENEALOGY) if f.endswith('.pkl')]
     if len(generation_files) == 0:
+        logging.info("No generations. Creating an initial generation")
         return initial_generation()
 
     generation_files = sorted(generation_files,
