@@ -6,4 +6,6 @@ RUN apt-get update && apt-get install tesseract-ocr -y
 # ENV QWOP_MASTER_ROOT http://192.168.99.100:5000
 
 COPY . /root/runner/.
+RUN Rscript /root/runner/install_dependencies.R
+
 CMD ["Rscript", "/root/runner/main.R"]

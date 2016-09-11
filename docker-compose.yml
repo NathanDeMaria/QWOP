@@ -1,12 +1,18 @@
 version: '2'
 services:
   r:
-    image: nathandemaria/qwop_slaver
+    image: nathandemaria/qwop_slaver:20160730
     ports:
     - "8787:8787"
     depends_on:
     - selenium
+    environment:
+    - QWOP_MASTER_ROOT=master:5000
   selenium:
     image: selenium/standalone-firefox-debug
     ports:
     - "4444:4444"
+  master:
+    image: nathandemaria/qwop_master:20160730
+    ports:
+    - "5000:5000"

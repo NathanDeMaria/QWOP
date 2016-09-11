@@ -36,7 +36,7 @@
       ],
       "workingDirectory": null,
       "readonlyRootFilesystem": null,
-      "image": "nathandemaria/qwop_slaver:20160726-2300",
+      "image": "nathandemaria/qwop_slaver:20160730",
       "command": null,
       "user": null,
       "dockerLabels": null,
